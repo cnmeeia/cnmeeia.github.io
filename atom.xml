@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://cnmeeia.github.io</id>
+    <title>surge</title>
+    <updated>2022-11-14T10:59:48.784Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <link rel="alternate" href="https://cnmeeia.github.io"/>
+    <link rel="self" href="https://cnmeeia.github.io/atom.xml"/>
+    <logo>https://cnmeeia.github.io/images/avatar.png</logo>
+    <icon>https://cnmeeia.github.io/favicon.ico</icon>
+    <rights>All rights reserved 2022, surge</rights>
+    <entry>
+        <title type="html"><![CDATA[Snell 搭建]]></title>
+        <id>https://cnmeeia.github.io/snell-da-jian/</id>
+        <link href="https://cnmeeia.github.io/snell-da-jian/">
+        </link>
+        <updated>2022-11-05T10:22:53.000Z</updated>
+        <content type="html"><![CDATA[<figure data-type="image" tabindex="1"><img src="https://cnmeeia.github.io/post-images/1667643782676.png" alt="" loading="lazy"></figure>
+<p><strong>安装 pm2</strong></p>
+<pre><code class="language-sh">curl -fsSL https://deb.nodesource.com/setup_16.x | bash - &amp;&amp; apt-get install -y nodejs &amp;&amp; node -v &amp;&amp; npm -v &amp;&amp; npm install pm2 -g
+</code></pre>
+<p><strong>创建文件夹</strong></p>
+<pre><code class="language-sh">mkdir  snell &amp;&amp; cd snell
+</code></pre>
+<p><strong>下载snell</strong></p>
+<pre><code class="language-sh">#amd
+
+wget https://dl.nssurge.com/snell/snell-server-v4.0.0-linux-amd64.zip
+
+
+#arm
+wget https://dl.nssurge.com/snell/snell-server-v4.0.0-linux-aarch64.zip
+
+
+unzip *.zip
+</code></pre>
+<p><strong>创建配置文件</strong></p>
+<pre><code class="language-sh">cat &lt;&lt; EOF &gt; /root/snell/snell-server.conf
+
+[snell-server]
+
+listen = 0.0.0.0:33670
+
+psk = DsU0x9afoOKLoWI1kUYnlxj6tv3YDef
+
+ipv6 = false
+
+obfs = http
+
+EOF
+</code></pre>
+<p><strong>后台运行</strong></p>
+<pre><code class="language-sh">pm2 start ./snell-server -n snell
+</code></pre>
+<p><strong>查看配置文件</strong></p>
+<pre><code class="language-sh">cat *.conf
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Tuic 搭建]]></title>
+        <id>https://cnmeeia.github.io/tuic/</id>
+        <link href="https://cnmeeia.github.io/tuic/">
+        </link>
+        <updated>2022-11-05T09:19:12.000Z</updated>
+        <content type="html"><![CDATA[<figure data-type="image" tabindex="1"><img src="https://cnmeeia.github.io/post-images/1667642883135.png" alt="" loading="lazy"></figure>
+<p><strong>安装 certbot 和 tuic</strong></p>
+<pre><code class="language-sh">apt -y update &amp;&amp; apt -y install wget certbot
+
+
+mkdir /opt/tuic &amp;&amp; cd /opt/tuic &amp;&amp; wget -P /opt/tuic/  https://github.com/EAimTY/tuic/releases/download/0.8.5/tuic-server-0.8.5-x86_64-linux-gnu
+</code></pre>
+<p><strong>赋予权限</strong></p>
+<pre><code class="language-shell">chmod +x *
+</code></pre>
+<p><strong>申请证书</strong></p>
+<pre><code class="language-sh">certbot certonly \
+
+--standalone \
+--agree-tos \
+--no-eff-email \
+--email ssl@app.ml \
+-d app2022.ml
+</code></pre>
+<p><strong>移动证书</strong></p>
+<pre><code class="language-sh">cp /etc/letsencrypt/live/app2022.ml/fullchain.pem .
+
+
+cp /etc/letsencrypt/live/app2022.ml/privkey.pem .
+</code></pre>
+<p><strong>下载配置文件</strong></p>
+<pre><code class="language-sh">wget -P /opt/tuic/ https://raw.githubusercontent.com/cnmeeia/tuic/main/config.json
+
+wget -P /lib/systemd/system/ https://raw.githubusercontent.com/cnmeeia/tuic/main/tuic.service
+</code></pre>
+<p><strong>启动 tuic</strong></p>
+<pre><code class="language-sh">systemctl enable --now tuic.service &amp;&amp; systemctl status tuic.service
+</code></pre>
+]]></content>
+    </entry>
+</feed>
